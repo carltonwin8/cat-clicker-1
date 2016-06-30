@@ -3,18 +3,51 @@
   <head>
     <meta charset="utf-8">
     <title>Cat Clicker</title>
+    <style>
+      img {
+        height: 200px;
+      }
+    </style>
   </head>
   <body>
-    <img id="img1" src="images/kitten1.jpg" alt="kitten" />
-    <p>
-      Clicks <span id="count">0</span>
-    </p>
+    <h1>Cat Clicker 1</h1>
+    <div id="cats_container">
+
+    </div>
+
     <script>
-      var image = document.getElementById('img1');
-      image.addEventListener('click', function(){
-        var count = document.getElementById('count').textContent;
-        document.getElementById('count').textContent = Number(count) + 1;
-      }, false);
+      var cats = [{
+        name: "cat1",
+        image: "images/1_cat.jpg"
+      },{
+        name: "cat2",
+        image: "images/2_cat.jpg"
+      }];
+      var idx = 1;
+      var container = document.getElementById('cats_container');
+      cats.forEach(function (cat) {
+        var div = document.createElement('div');
+        div.className = 'cats_container';
+        div.id = "cat" + idx;
+        var name = document.createElement('h2');
+        name.innerText = cat.name;
+        var image = document.createElement('img');
+        image.src = cat.image;
+        image.addEventListener('click', clickListner);
+        var clicks = document.createElement('p');
+        clicks.innerHTML = 'Clicks <span class="count">0<span>';
+
+        div.appendChild(name);
+        div.appendChild(image);
+        div.appendChild(clicks);
+        container.appendChild(div);
+        idx++;
+      })
+
+      function clickListner(elem) {
+         var elem = elem.srcElement.parentElement.children[2].getElementsByClassName('count')[0]
+         elem.textContent = Number(elem.textContent) + 1;
+      }
     </script>
   </body>
 </html>
