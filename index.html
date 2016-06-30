@@ -11,8 +11,15 @@
   </head>
   <body>
     <h1>Cat Clicker 1</h1>
-    <div id="cats_container">
 
+    <div id="cats">
+
+    </div>
+
+    <div id="cat_container">
+      <h2 id="name"></h2>
+      <img id="image" src="" alt="" />
+      <p id="clicks"></p>
     </div>
 
     <script>
@@ -22,32 +29,56 @@
       },{
         name: "cat2",
         image: "images/2_cat.jpg"
+      },{
+        name: "cat3",
+        image: "images/3_cat.jpg"
+      },{
+        name: "cat4",
+        image: "images/4_cat.jpg"
+      },{
+      name: "cat5",
+      image: "images/5_cat.jpg"
       }];
-      var idx = 1;
-      var container = document.getElementById('cats_container');
+      var clickCounts = [];
+      var idx = 0;
+      var container = document.getElementById('cats');
+      var ul = document.createElement('ul');
+      var id=0;
       cats.forEach(function (cat) {
-        var div = document.createElement('div');
-        div.className = 'cats_container';
-        div.id = "cat" + idx;
-        var name = document.createElement('h2');
-        name.innerText = cat.name;
-        var image = document.createElement('img');
-        image.src = cat.image;
-        image.addEventListener('click', clickListner);
-        var clicks = document.createElement('p');
-        clicks.innerHTML = 'Clicks <span class="count">0<span>';
+        var li = document.createElement('li');
+        var name = document.createElement('a');
+        var txt = document.createTextNode(cat.name);
+        name.setAttribute('href',cat.name);
+        name.appendChild(txt);
+        name.addEventListener('click', (function (i) {
+          return function (e) {
+            e.preventDefault();
+            showCat(i);
+            return false;
+          }
+        })(id));
 
-        div.appendChild(name);
-        div.appendChild(image);
-        div.appendChild(clicks);
-        container.appendChild(div);
-        idx++;
+        li.appendChild(name);
+        ul.appendChild(li);
+        id++;
       })
+      container.appendChild(ul);
 
-      function clickListner(elem) {
-         var elem = elem.srcElement.parentElement.children[2].getElementsByClassName('count')[0]
-         elem.textContent = Number(elem.textContent) + 1;
+      document.getElementById('image').addEventListener('click', function () {
+          clickCounts[idx]++;
+          document.getElementById('clicks').innerText = 'Clicks = ' + clickCounts[idx];
+      });
+
+      function showCat(i) {
+        idx = i;
+        var cat = cats[i];
+        if (clickCounts[i] === undefined) clickCounts[i] = 0;
+        document.getElementById('name').innerText = cat.name;
+        document.getElementById('image').src = cat.image;
+        document.getElementById('clicks').innerText = 'Clicks = ' + clickCounts[i];
       }
+
+      showCat(idx);
     </script>
   </body>
 </html>
