@@ -19,6 +19,7 @@
       return this.cats;
     },
     putCat: function(idx, cat) {
+      console.log(idx + " " + cat.clickCount);
       this.cats[idx] = cat;
     }
   }
@@ -27,12 +28,18 @@
     getCatToDisplay: function () {
       return model.getCat(this.selectedCat);
     },
-    showCat: function (idx) {
+    renderViews: function (idx) {
       this.selectedCat = idx;
       viewCat.render();
+      viewAdmin.render();
     },
     getCats: function () {
       return model.getCats();
+    },
+    putCat: function (cat) {
+      console.log(cat);
+      model.putCat(this.selectedCat, cat);
+      this.renderViews(this.selectedCat);
     },
     incrementDisplayedCatsClick: function () {
       var cat = model.getCat(this.selectedCat);
@@ -46,6 +53,7 @@
       this.setupModelData();
       viewCatList.init();
       viewCat.init();
+      viewAdmin.init();
     },
     setupModelData: function() {
       var cats = [{
@@ -68,7 +76,7 @@
         model.addCat(cat.name, cat.imageLocation);
       })
     }
-  }
+  };
 
   var viewCatList = {
       init: function () {
@@ -87,7 +95,7 @@
           name.addEventListener('click', (function (i) {
             return function (e) {
               e.preventDefault();
-              octopus.showCat(i);
+              octopus.renderViews(i);
               return false;
             }
           })(id));
@@ -97,7 +105,7 @@
           id++;
         })
       }
-  }
+  };
 
   var viewCat = {
     init: function () {
@@ -114,6 +122,49 @@
       this.name.innerText = cat.name;
       this.imageLocation.src = cat.imageLocation;
       this.clickCount.innerText = cat.clickCount;
+    }
+  };
+
+  var viewAdmin = {
+    init: function () {
+      self = this;
+      this.adminForm = document.getElementById('adminForm');
+      this.adminEnable = document.getElementById('adminEnable');
+      this.adminCancel = document.getElementById('adminCancel');
+      this.adminSave = document.getElementById('adminSave');
+      this.catName = document.getElementById('catName');
+      this.catUrl = document.getElementById('catUrl');
+      this.catClicks = document.getElementById('catClicks');
+
+      this.adminEnable.addEventListener('click', function () {
+        self.adminEnable.disabled = true;
+        self.render();
+      });
+      this.adminCancel.addEventListener('click', function () {
+        self.adminEnable.disabled = false;
+        self.render();
+      });
+      this.adminSave.addEventListener('click', function () {
+        self.adminEnable.disabled = false;
+        octopus.putCat({
+          name: self.catName.value,
+          imageLocation: self.catUrl.value,
+          clickCount: self.catClicks.value
+        });
+        self.render();
+      });
+      this.render();
+    },
+    render: function () {
+      var cat = octopus.getCatToDisplay();
+      this.catName.value = cat.name;
+      this.catUrl.value = cat.imageLocation;
+      this.catClicks.value = cat.clickCount;
+      if (this.adminEnable.disabled) {
+        this.adminForm.style.visibility = "visible";
+      } else {
+        this.adminForm.style.visibility = "hidden";
+      }
     }
   }
 
