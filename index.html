@@ -12,73 +12,16 @@
   <body>
     <h1>Cat Clicker 1</h1>
 
-    <div id="cats">
-
+    <div id="catsList">
+      <ul id="cats"></ul>
     </div>
 
     <div id="cat_container">
       <h2 id="name"></h2>
       <img id="image" src="" alt="" />
-      <p id="clicks"></p>
+      <p><span id="clicks"></span> Clicks</p>
     </div>
 
-    <script>
-      var cats = [{
-        name: "cat1",
-        image: "images/1_cat.jpg"
-      },{
-        name: "cat2",
-        image: "images/2_cat.jpg"
-      },{
-        name: "cat3",
-        image: "images/3_cat.jpg"
-      },{
-        name: "cat4",
-        image: "images/4_cat.jpg"
-      },{
-      name: "cat5",
-      image: "images/5_cat.jpg"
-      }];
-      var clickCounts = [];
-      var idx = 0;
-      var container = document.getElementById('cats');
-      var ul = document.createElement('ul');
-      var id=0;
-      cats.forEach(function (cat) {
-        var li = document.createElement('li');
-        var name = document.createElement('a');
-        var txt = document.createTextNode(cat.name);
-        name.setAttribute('href',cat.name);
-        name.appendChild(txt);
-        name.addEventListener('click', (function (i) {
-          return function (e) {
-            e.preventDefault();
-            showCat(i);
-            return false;
-          }
-        })(id));
-
-        li.appendChild(name);
-        ul.appendChild(li);
-        id++;
-      })
-      container.appendChild(ul);
-
-      document.getElementById('image').addEventListener('click', function () {
-          clickCounts[idx]++;
-          document.getElementById('clicks').innerText = 'Clicks = ' + clickCounts[idx];
-      });
-
-      function showCat(i) {
-        idx = i;
-        var cat = cats[i];
-        if (clickCounts[i] === undefined) clickCounts[i] = 0;
-        document.getElementById('name').innerText = cat.name;
-        document.getElementById('image').src = cat.image;
-        document.getElementById('clicks').innerText = 'Clicks = ' + clickCounts[i];
-      }
-
-      showCat(idx);
-    </script>
+    <script src='js/main.js'></script>
   </body>
 </html>
